@@ -40,4 +40,14 @@ class TestMiddleware < MiniTest::Test
 
     refute_equal true, collection.components.empty?
   end
+
+  def test_config_for_rails_app
+    NavHealth::Middleware.config do |middleware|
+      middleware.rails_app = true
+    end
+
+    collection = NavHealth::Middleware.instance_variable_get('@components')
+
+    refute_equal true, collection.components.empty?
+  end
 end

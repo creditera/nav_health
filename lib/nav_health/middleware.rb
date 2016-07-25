@@ -15,6 +15,14 @@ module NavHealth
       def components
         @components
       end
+
+      def rails_app= bool
+        if bool
+          components.add 'db' do
+            ActiveRecord::Base.connected?
+          end
+        end
+      end
     end
 
     def initialize app
@@ -29,12 +37,14 @@ module NavHealth
           'Content-Type' => 'application/json'
         }
 
+        components = self.class.instance_variable_get '@components'
+
         body = {
           hostname: Socket.gethostname,
           time: Time.now.utc.to_s,
           ts: Time.now.to_f,
           status: HEALTH_STATUSES[HEALTHY],
-          components: self.class.instance_variable_get('@components').checks
+          components: components.checks
         }.to_json
 
         [status, headers, [body]]
