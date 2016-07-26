@@ -1,5 +1,6 @@
 require "nav_health/version"
 require 'nav_health/component_collection'
+require "nav_health/check"
 require 'nav_health/middleware'
 
 module NavHealth

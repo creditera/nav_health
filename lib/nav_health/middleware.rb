@@ -3,27 +3,7 @@ require 'socket'
 
 module NavHealth
   class Middleware
-    HEALTH_CHECK_PATH = '/nav_healthy'
-
-    @components ||= NavHealth::ComponentCollection.new
-
-    class << self
-      def config
-        yield self
-      end
-
-      def components
-        @components
-      end
-
-      def rails_app= bool
-        if bool
-          components.add 'db' do
-            ActiveRecord::Base.connected?
-          end
-        end
-      end
-    end
+    HEALTH_CHECK_PATH = '/nav_health'
 
     def initialize app
       @app = app
@@ -37,15 +17,7 @@ module NavHealth
           'Content-Type' => 'application/json'
         }
 
-        components = self.class.instance_variable_get '@components'
-
-        body = {
-          hostname: Socket.gethostname,
-          time: Time.now.utc.to_s,
-          ts: Time.now.to_f,
-          status: HEALTH_STATUSES[HEALTHY],
-          components: components.checks
-        }.to_json
+        body = NavHealth::Check.run.to_json
 
         [status, headers, [body]]
       else

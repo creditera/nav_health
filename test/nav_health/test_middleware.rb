@@ -28,26 +28,4 @@ class TestMiddleware < MiniTest::Test
 
     refute_equal body, result
   end
-
-  def test_config
-    NavHealth::Middleware.config do |middleware|
-      middleware.components.add 'db' do
-        true
-      end
-    end
-
-    collection = NavHealth::Middleware.instance_variable_get('@components')
-
-    refute_equal true, collection.components.empty?
-  end
-
-  def test_config_for_rails_app
-    NavHealth::Middleware.config do |middleware|
-      middleware.rails_app = true
-    end
-
-    collection = NavHealth::Middleware.instance_variable_get('@components')
-
-    refute_equal true, collection.components.empty?
-  end
 end
