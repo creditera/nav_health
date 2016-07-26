@@ -5,16 +5,12 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nav_health'
+gem 'nav_health', git: 'git@github.com:creditera/nav_health'
 ```
 
 And then execute:
 ```
  $ bundle
-```
-Or install it yourself as:
-```
- $ gem install nav_health
 ```
 ## Usage
 
