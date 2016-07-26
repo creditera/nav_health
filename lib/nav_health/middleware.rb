@@ -3,7 +3,7 @@ require 'socket'
 
 module NavHealth
   class Middleware
-    HEALTH_CHECK_PATH = '/nav_health'
+    HEALTH_CHECK_PATH = '/nav_healthy'
 
     @components ||= NavHealth::ComponentCollection.new
 
