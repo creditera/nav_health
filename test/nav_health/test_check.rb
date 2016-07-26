@@ -40,4 +40,17 @@ class TestCheck < MiniTest::Test
 
     assert_equal result.keys, expected_keys
   end
+
+  def test_run_with_component_errors
+    # The service should show as down if a dependent service is unreachable
+    NavHealth::Check.config do |middleware|
+      middleware.components.add 'db' do
+        false
+      end
+    end
+
+    result = NavHealth::Check.run
+
+    assert_equal 'sonofa', result[:status]
+  end
 end

@@ -20,12 +20,21 @@ module NavHealth
       end
 
       def run
+        component_checks = NavHealth::Check.run_checks
+
+        status = HEALTH_STATUSES[HEALTHY]
+
+        # If any components that the app relies on are down, the app should be down
+        if component_checks.any? { |check| check[:status] == HEALTH_STATUSES[ERROR] }
+          status = HEALTH_STATUSES[ERROR]
+        end
+
         {
           hostname: Socket.gethostname,
           time: Time.now.utc.to_s,
           ts: Time.now.to_f,
-          status: HEALTH_STATUSES[HEALTHY],
-          components: NavHealth::Check.run_checks
+          status: status,
+          components: component_checks
         }
       end
 

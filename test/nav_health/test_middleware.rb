@@ -28,4 +28,21 @@ class TestMiddleware < MiniTest::Test
 
     refute_equal body, result
   end
+
+  def test_returns_500_if_down
+    env = { 'REQUEST_PATH' => '/nav_health' }
+    app = -> (env) { body }
+    
+    NavHealth::Check.config do |check|
+      check.components.add 'db' do
+        false
+      end
+    end
+
+    middleware = NavHealth::Middleware.new app
+
+    result = middleware.call env
+
+    assert_equal 500, result[0]
+  end
 end

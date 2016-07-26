@@ -17,9 +17,11 @@ module NavHealth
           'Content-Type' => 'application/json'
         }
 
-        body = NavHealth::Check.run.to_json
+        body = NavHealth::Check.run
 
-        [status, headers, [body]]
+        status = 500 if body[:status] == HEALTH_STATUSES[ERROR]
+
+        [status, headers, [body.to_json]]
       else
         @app.call env
       end
