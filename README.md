@@ -54,7 +54,7 @@ Adding a component to the health check is straightforward. You just need to add 
 
 ```ruby
 NavHealth::Check.config do |health|
-  config.components.add 'db' do
+  health.components.add 'db' do
     # Add logic to determine if the database connection is functioning...
   end
 end
