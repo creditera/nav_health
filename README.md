@@ -5,7 +5,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nav_health', git: 'git@github.com:creditera/nav_health'
+gem 'nav_health', git: 'https://github.com/creditera/nav_health.git'
 ```
 
 And then execute:
