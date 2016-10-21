@@ -17,6 +17,18 @@ class TestMiddleware < MiniTest::Test
     assert_equal body, result
   end
 
+  def test_returns_health_check_if_match_path_info
+    body = [200, {}, [{foo: 'bar'}.to_json]]
+    env = { 'PATH_INFO' => '/nav_health' }
+    app = -> (env) { body }
+
+    middleware = NavHealth::Middleware.new app
+
+    result = middleware.call env
+
+    refute_equal body, result
+  end
+
   def test_returns_health_check_if_match
     body = [200, {}, [{foo: 'bar'}.to_json]]
     env = { 'REQUEST_PATH' => '/nav_health' }
@@ -32,7 +44,7 @@ class TestMiddleware < MiniTest::Test
   def test_returns_500_if_down
     env = { 'REQUEST_PATH' => '/nav_health' }
     app = -> (env) { body }
-    
+
     NavHealth::Check.config do |check|
       check.components.add 'db' do
         false
