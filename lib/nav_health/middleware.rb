@@ -8,9 +8,10 @@ module NavHealth
     def initialize app
       @app = app
     end
-    
+
     def call env
-      if env['REQUEST_PATH'] == HEALTH_CHECK_PATH
+      path = env['REQUEST_PATH'] || env['PATH_INFO']
+      if path == HEALTH_CHECK_PATH
         status = 200
 
         headers = {
