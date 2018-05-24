@@ -20,7 +20,10 @@ module NavHealth
 
         body = NavHealth::Check.run
 
-        status = 500 if body[:status] == HEALTH_STATUSES[ERROR]
+        if body[:status] == HEALTH_STATUSES[ERROR]
+          status = 500
+          defined?(::Rails) and ::Rails.logger.info(body.to_json)
+        end
 
         [status, headers, [body.to_json]]
       else
