@@ -14,7 +14,7 @@ module NavHealth
       def rails_app= bool
         if bool
           components.add 'db' do
-            ActiveRecord::Base.connected?
+            ActiveRecord::Base.retrieve_connection && ActiveRecord::Base.connected?
           end
         end
       end
